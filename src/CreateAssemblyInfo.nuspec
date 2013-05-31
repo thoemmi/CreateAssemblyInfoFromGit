@@ -13,7 +13,7 @@
   </metadata>
   <files>
     <file src="CreateAssemblyInfoFromGit\bin\Release\**\*" target="tools\" exclude="*.xml;*.pdb"/>
-    <!--<file src="NDepCheck.targets" target="build\" />
-    <file src="Install.ps1" target="tools\" />-->
+    <file src="CreateAssemblyInfoFromGit.targets" target="build\" />
+    <file src="Install.ps1" target="tools\" />
   </files>
 </package>

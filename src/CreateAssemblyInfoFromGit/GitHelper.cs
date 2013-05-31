@@ -6,12 +6,13 @@ using System.Text.RegularExpressions;
 using LibGit2Sharp;
 
 namespace CreateAssemblyInfoFromGit {
-    internal static class GitHelper {
+    public static class GitHelper {
         public static string GetVersion(string path) {
             using (var repository = new Repository(GetGitRepositoryPath(path))) {
                 var allTags = repository.Tags.ToList();
 
                 var build = 0;
+                var isPreliminary = false;
                 string version = null;
                 foreach (var commit in repository.Head.Commits) {
                     var tags = allTags.Where(t => t.IsAnnotated && t.Target == commit).ToList();
@@ -19,6 +20,7 @@ namespace CreateAssemblyInfoFromGit {
                         break;
                     }
                     if (TryGetVersion(tags, @"vNext\-?", out version)) {
+                        isPreliminary = true;
                         break;
                     }
                     if (TryGetVersion(tags, @"v\-?", out version)) {
@@ -28,8 +30,12 @@ namespace CreateAssemblyInfoFromGit {
                     build++;
                 }
 
-                if (build != 0) {
+                if (version == null) {
+                    version = "0.0.0-beta" + build;
+                } else if (isPreliminary) {
                     version += "-beta" + build;
+                } else {
+                    version += "." + build;
                 }
                 return version;
             }
@@ -71,7 +77,7 @@ namespace CreateAssemblyInfoFromGit {
                 if (match.Success) {
                     var minormajor = match.Groups["minormajor"].Value;
                     var patch = match.Groups["patch"].Value;
-                    version = minormajor + (String.IsNullOrEmpty(patch) ? ".0" : patch);
+                    version = minormajor + (String.IsNullOrEmpty(patch) ? String.Empty : patch);
                     return true;
                 }
             }

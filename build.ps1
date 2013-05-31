@@ -10,11 +10,13 @@ Pop-Location
 # create assembly info
 Update-AssemblyInfo $version (Join-Path $srcdir "CreateAssemblyInfoFromGit\CommonAssemblyInfo.cs")
 
-
 # build
 $msbuild = "c:\windows\microsoft.net\framework\v4.0.30319\MSBuild.exe"
 $solutionPath = Join-Path $srcdir "CreateAssemblyInfoFromGit.sln"
 Invoke-Expression "$msbuild `"$solutionPath`" /p:Configuration=Release /t:Build"
+
+#test
+. (Join-Path $dir "test.ps1")
 
 # nupack
 $nuget = Join-Path $srcdir ".nuget\nuget.exe"
