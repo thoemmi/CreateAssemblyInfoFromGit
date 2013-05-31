@@ -7,6 +7,8 @@ Push-Location $dir
 $version = Get-VersionFromGit
 Pop-Location
 
+Write-Host "Version is $version"
+
 # create assembly info
 Update-AssemblyInfo $version (Join-Path $srcdir "CreateAssemblyInfoFromGit\CommonAssemblyInfo.cs")
 
@@ -22,3 +24,5 @@ Invoke-Expression "$msbuild `"$solutionPath`" /p:Configuration=Release /t:Build"
 $nuget = Join-Path $srcdir ".nuget\nuget.exe"
 $nuspec = Join-Path $srcdir "CreateAssemblyInfo.nuspec"
 Invoke-Expression "$nuget pack `"$nuspec`" -OutputDirectory $dir -version $version"
+
+Write-Host "Package for version $version created." -ForegroundColor Green
