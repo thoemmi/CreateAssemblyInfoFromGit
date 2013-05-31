@@ -23,6 +23,8 @@ function Test {
     )
     Write-Host Testing...
     git init .
+    git config user.email "you@example.com"
+    git config user.name "Your Name"
 
     # no tags, just one commit
     AddFileAndCommit
@@ -82,5 +84,5 @@ try{
 }
 finally {
     Pop-Location
-    Remove-Item -Path $testpath -Recurse -Force | Out-Null
+    #Remove-Item -Path $testpath -Recurse -Force | Out-Null
 }
