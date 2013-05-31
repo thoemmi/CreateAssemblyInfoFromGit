@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>CreateAssemblyInfoFromGit</id>
+    <version>1.0.0</version>
+    <authors>thoemmi</authors>
+    <owners>thoemmi </owners>
+    <projectUrl>https://github.com/thoemmi/CreateAssemblyInfoFromGit</projectUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>Creates an AssemblyInfo file based on git history.</description>
+    <copyright>Copyright 2013</copyright>
+    <tags>tools git assemblyinfo</tags>
+    <minClientVersion>2.5</minClientVersion>
+  </metadata>
+  <files>
+    <file src="CreateAssemblyInfoFromGit\bin\Release\**\*" target="tools\" exclude="*.xml;*.pdb"/>
+    <!--<file src="NDepCheck.targets" target="build\" />
+    <file src="Install.ps1" target="tools\" />-->
+  </files>
+</package>

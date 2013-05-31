@@ -1,8 +1,10 @@
 *.suo
 *.user
-*.sln.docstates
+*.sln.cache
+*.nupkg
 
 [Dd]ebug/
 [Rr]elease/
-
 [Pp]ackages/
+
+CommonAssemblyInfo.cs
