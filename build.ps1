@@ -1,12 +1,14 @@
 ﻿$dir = Split-Path $MyInvocation.MyCommand.Path
 $srcdir = Join-Path $dir "src"
 
-# create assembly info
+#get version from git
 . (Join-Path $srcdir "CreateAssemblyInfo.ps1")
 Push-Location $dir
 $version = Get-VersionFromGit
 Pop-Location
-Update-AssemblyInfo $version (Join-Path $srcdir "CommonAssemblyInfo.cs")
+
+# create assembly info
+Update-AssemblyInfo $version (Join-Path $srcdir "CreateAssemblyInfoFromGit\CommonAssemblyInfo.cs")
 
 
 # build
