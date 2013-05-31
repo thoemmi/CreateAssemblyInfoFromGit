@@ -4,6 +4,7 @@
     $patch = 0
     $build = 0
     $isPrerelease = $true
+    $foundVersion = $false
  
     # get version of last release plus number of commits since then
     $version = git describe --match "v[\-0-9]*" --always
@@ -14,14 +15,15 @@
         $patch = if ($matches.patch -eq $null) { 0 } else { $matches.patch }
         $build = if ($matches.build -eq $null) { 0 } else { $matches.build }
         $isPrerelease = $build -ne 0
+        $foundVersion = $true
     }
  
     # if there are commits since the last version tag, look for tag for next version
-    if ($build -ne 0) {
+    if ($build -ne 0 -or -not $foundVersion) {
         $version = git describe --match "vNext-*" --always
         if ($version -match "^vNext-(?<major>\d+)\.(?<minor>\d+)(\.(?<patch>\d+))?(-(?<build>\d+)-\w{8})?$") {
             $nextbuild = if ($matches.build -eq $null) { 0 } else { $matches.build }
-            if ($nextbuild -le $build) {
+            if ($nextbuild -le $build -or -not $foundVersion) {
                 $major = $matches.major
                 $minor = $matches.minor
                 $patch = if ($matches.patch -eq $null) { 0 } else { $matches.patch }
