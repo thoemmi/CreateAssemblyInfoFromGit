@@ -9,7 +9,7 @@
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>Creates an AssemblyInfo file based on git history.</description>
     <copyright>Copyright 2013</copyright>
-    <tags>tools git assemblyinfo</tags>
+    <tags>tools git assemblyinfo semver version</tags>
   </metadata>
   <files>
     <file src="CreateAssemblyInfoFromGit\bin\Release\**\*" target="tools\" exclude="*.xml;*.pdb"/>
