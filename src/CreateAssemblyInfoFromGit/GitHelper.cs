@@ -6,38 +6,66 @@ using System.Text.RegularExpressions;
 using LibGit2Sharp;
 
 namespace CreateAssemblyInfoFromGit {
+    public class CommonVersion {
+        public string AssemblyVersion { get; set; }
+        public string AssemblyInformationalVersion { get; set; }
+    }
+
     public static class GitHelper {
-        public static string GetVersion(string path) {
+        public static CommonVersion GetVersion(string path) {
             using (var repository = new Repository(GetGitRepositoryPath(path))) {
                 var allTags = repository.Tags.ToList();
 
                 var build = 0;
                 var isPreliminary = false;
                 string version = null;
+                var justCountingTillVNext = false;
                 foreach (var commit in repository.Head.Commits) {
                     var tags = allTags.Where(t => t.IsAnnotated && t.Target == commit).ToList();
                     if (build == 0 && TryGetVersion(tags, @"v\-?", out version)) {
-                        break;
+                        justCountingTillVNext = true;
+                        build++;
+                        continue;
                     }
-                    if (TryGetVersion(tags, @"vNext\-?", out version)) {
-                        isPreliminary = true;
-                        break;
-                    }
-                    if (TryGetVersion(tags, @"v\-?", out version)) {
-                        break;
+                    if (justCountingTillVNext) {
+                        string dummy;
+                        if (TryGetVersion(tags, @"vNext\-?", out dummy)) {
+                            break;
+                        }
+                    } else {
+                        if (TryGetVersion(tags, @"vNext\-?", out version)) {
+                            isPreliminary = true;
+                            break;
+                        }
+                        if (TryGetVersion(tags, @"v\-?", out version)) {
+                            break;
+                        }
                     }
 
                     build++;
                 }
 
                 if (version == null) {
-                    version = "0.0.0-beta" + build;
+                    return new CommonVersion {
+                        AssemblyVersion = "0.0.0." + build,
+                        AssemblyInformationalVersion = "0.0.0-beta" + build
+                    };
                 } else if (isPreliminary) {
-                    version += "-beta" + build;
+                    return new CommonVersion {
+                        AssemblyVersion = version + ".0." + build,
+                        AssemblyInformationalVersion = version + ".0-beta" + build
+                    };
+                } else if (justCountingTillVNext) {
+                    return new CommonVersion {
+                        AssemblyVersion = version + ".0." + build,
+                        AssemblyInformationalVersion = version + ".0"
+                    };
                 } else {
-                    version += "." + build;
+                    return new CommonVersion {
+                        AssemblyVersion = version + "." + build + ".0",
+                        AssemblyInformationalVersion = version + "." + build
+                    };
                 }
-                return version;
             }
         }
 
@@ -71,13 +99,11 @@ namespace CreateAssemblyInfoFromGit {
         }
 
         private static bool TryGetVersion(IEnumerable<Tag> tags, string prefix, out string version) {
-            string pattern = @"^" + prefix + @"(?<minormajor>\d+\.\d+)(?<patch>\.\d+)?$";
+            string pattern = @"^" + prefix + @"(?<minormajor>\d+\.\d+)?$";
             foreach (var tag in tags) {
                 var match = Regex.Match(tag.Name, pattern);
                 if (match.Success) {
-                    var minormajor = match.Groups["minormajor"].Value;
-                    var patch = match.Groups["patch"].Value;
-                    version = minormajor + (String.IsNullOrEmpty(patch) ? String.Empty : patch);
+                    version = match.Groups["minormajor"].Value;
                     return true;
                 }
             }

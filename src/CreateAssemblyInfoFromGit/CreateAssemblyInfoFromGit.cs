@@ -25,7 +25,6 @@ namespace CreateAssemblyInfoFromGit {
                 }
             }
 
-            var fileVersion = version.Replace("-beta", ".");
             var content = String.Format(@"// Generated: {0} (UTC)
 // Warning: This is generated code! Don't touch as it will be overridden by the build process.
 
@@ -33,7 +32,7 @@ using System.Reflection;
 
 [assembly: AssemblyVersion(""{1}"")]
 [assembly: AssemblyFileVersion(""{1}"")]
-[assembly: AssemblyInformationalVersion(""{2}"")]", DateTime.UtcNow, fileVersion, version);
+[assembly: AssemblyInformationalVersion(""{2}"")]", DateTime.UtcNow, version.AssemblyVersion, version.AssemblyInformationalVersion);
             File.WriteAllText(AssemblyInfoPath.ItemSpec, content);
 
             return true;
