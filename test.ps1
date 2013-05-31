@@ -30,6 +30,12 @@ function Test {
     git config user.name "Your Name"
 
     AddFileAndCommit
+    Assert "0.0.0.0" "0.0.0-beta0"
+
+    AddFileAndCommit
+    Assert "0.0.0.1" "0.0.0-beta1"
+
+    AddFileAndCommit
     AddTag "vNext-1.0"
     Assert "1.0.0.0" "1.0.0-beta0"
 
