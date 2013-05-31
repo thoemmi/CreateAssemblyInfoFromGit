@@ -6,7 +6,7 @@ CreateAssemblyInfoFromGit is a MSBuild task creating a `CommonAssemblyInfo.cs` b
 
 ### vX.Y[.Z]
 
-CreateAssemblyInfoFromGit walks the commits backwards until it finds a tag with the format vX.Y[.Z] (the exact regular expression is ` ^v\-?(\d+\.\d+)(\.\d+)?$ `). It takes this version and appends the distance to _HEAD_ as the build number, e.g. the number of commits since the tag. With this information it generates a file named `CommonAssemblyInfo.cs` in the solution folder. E.g. if you have a tag named _v1.0.0_, six commits later the MSBUild task would write following content to `CommonAssemblyInfo.cs`:
+CreateAssemblyInfoFromGit walks the commits backwards until it finds a tag with the format vX.Y[.Z]. It takes this version and appends the distance to _HEAD_ as the build number, e.g. the number of commits since the tag. With this information it generates a file named `CommonAssemblyInfo.cs` in the solution folder. E.g. if you have a tag named _v1.0.0_, six commits later the MSBUild task would write following content to `CommonAssemblyInfo.cs`:
 
     // Generated: 05/31/2013 16:51:56 (UTC)
     // Warning: This is generated code! Don't touch as it will be overridden by the build process.
