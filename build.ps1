@@ -22,10 +22,10 @@ $scriptblock = $ExecutionContext.InvokeCommand.NewScriptBlock(
 "Add-Type -Path $assemblyPath
 `$ver = [CreateAssemblyInfoFromGit.GitHelper]::GetVersion('$dir')
 [CreateAssemblyInfoFromGit.CreateAssemblyInfoFromGit]::CreateOrUpdateAssemblyInfo('$assemblyInfoPath', `$ver, `$Null)
-`$ver")
+`$(`$ver.AssemblyInformationalVersion)")
 $version = powershell -noprofile -nologo -command $scriptblock
 
-Write-Host "Version is $($version.AssemblyInformationalVersion)"
+Write-Host "Version is $version"
 
 # build again, this time with corrected version
 BuildProject 
@@ -36,6 +36,6 @@ BuildProject
 # nupack
 $nuget = Join-Path $srcdir ".nuget\nuget.exe"
 $nuspec = Join-Path $srcdir "CreateAssemblyInfo.nuspec"
-Invoke-Expression "$nuget pack `"$nuspec`" -OutputDirectory $dir -version $($version.AssemblyInformationalVersion)"
+Invoke-Expression "$nuget pack `"$nuspec`" -OutputDirectory $dir -version $version"
 
-Write-Host "Package for version $($version.AssemblyInformationalVersion) created." -ForegroundColor Green
+Write-Host "Package for version $version created." -ForegroundColor Green
