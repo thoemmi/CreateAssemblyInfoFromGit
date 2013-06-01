@@ -34,7 +34,7 @@ However, it gets more interesting when you plan a new release for your software.
     
     [assembly: AssemblyVersion("2.0.0.3")]
     [assembly: AssemblyFileVersion("2.0.0.3")]
-    [assembly: AssemblyInformationalVersion("2.0.0-beta.3")]
+    [assembly: AssemblyInformationalVersion("2.0.0-beta0003")]
 
 Here the major and minor components of the version are determined by the tag, the build component is 0, and the release component is the number of commits since the tag.
     
@@ -42,23 +42,27 @@ Here the major and minor components of the version are determined by the tag, th
 
 Here's a table how I test the version generation. Each row represents a commit with optional tags attached:
 
-    Tags              File     Display       Description
+    Tags              File     Display         Description
     -----------------------------------------------------------------------------
-                      0.0.0.0  0.0.0-beta.0  
-                      0.0.0.1  0.0.0-beta.1  
-    vNext-1.0         1.0.0.0  1.0.0-beta.0  Started working on v1.0
-                      1.0.0.1  1.0.0-beta.1
-                      1.0.0.2  1.0.0-beta.2
-    v-1.0             1.0.0.3  1.0.0         Release v1.0
+                      0.0.0.0  0.0.0-beta0000  
+                      0.0.0.1  0.0.0-beta0001  
+    vNext-1.0         1.0.0.0  1.0.0-beta0000  Started working on v1.0
+                      1.0.0.1  1.0.0-beta0001
+                      1.0.0.2  1.0.0-beta0002
+    v-1.0             1.0.0.3  1.0.0           Release v1.0
                       1.0.1.0  1.0.1
 		              1.0.2.0  1.0.2
-    vNext-1.1         1.1.0.0  1.1.0-beta.0  Next release will be 1.1
-                      1.1.0.1  1.1.0-beta.1
-    v-1.1, vNext-1.2  1.1.0.2  1.1.0         Release v1.1, started working on v1.2
-                      1.2.0.1  1.2.0-beta.1			
+    vNext-1.1         1.1.0.0  1.1.0-beta0000  Next release will be 1.1
+                      1.1.0.1  1.1.0-beta0001
+    v-1.1, vNext-1.2  1.1.0.2  1.1.0           Release v1.1, started working on v1.2
+                      1.2.0.1  1.2.0-beta0001			
 
 ## Usage
 
 Just add the NuGet package [CreateAssemblyInfoFromGit](https://nuget.org/packages/CreateAssemblyInfoFromGit/) to your project. The package adds the CreateAssemblyInfoFromGit MSBuild task and a link to `CommonAssemblyInfo.cs` in the solution folder.
 
 From now on whenever your project is built and there are new commits, `CommonAssemblyInfo.cs` will be updated.
+
+## Annotation
+
+I would have prefered to generate prerelease versions as `0.0.0-beta.0`, but unfortunately NuGet is not fully compliant with SemVer. NuGet does not allow the `.` behind the beta, and it sorts alphabetically (it's documented [here](http://docs.nuget.org/docs/Reference/Versioning#Really_brief_introduction_to_SemVer)). Therefore I had to skip the `.` and pad the prelease number with zeros. 

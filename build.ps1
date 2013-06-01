@@ -32,6 +32,9 @@ BuildProject
 
 # test
 powershell -noprofile -nologo (Join-Path $dir "test.ps1")
+if ($LASTEXITCODE -ne 0) {
+    throw "Tests failed"
+}
 
 # nupack
 $nuget = Join-Path $srcdir ".nuget\nuget.exe"
