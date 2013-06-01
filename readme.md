@@ -2,7 +2,7 @@
 
 CreateAssemblyInfoFromGit is a MSBuild task creating a `CommonAssemblyInfo.cs` based on the git repository.
 
-The goal is to create a predictable version schema for your project. The generated versions follows [Semantic Versioning](http://semver.org)
+The goal is to create a predictable version schema for your project. The generated versions follow [Semantic Versioning](http://semver.org) with some restrictions required by NuGet.
 
 ## How the version is determined
 
@@ -51,7 +51,7 @@ Here's a table how I test the version generation. Each row represents a commit w
                       1.0.0.2  1.0.0-beta0002
     v-1.0             1.0.0.3  1.0.0           Release v1.0
                       1.0.1.0  1.0.1
-		              1.0.2.0  1.0.2
+                      1.0.2.0  1.0.2
     vNext-1.1         1.1.0.0  1.1.0-beta0000  Next release will be 1.1
                       1.1.0.1  1.1.0-beta0001
     v-1.1, vNext-1.2  1.1.0.2  1.1.0           Release v1.1, started working on v1.2
