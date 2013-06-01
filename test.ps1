@@ -30,20 +30,20 @@ function Test {
     git config user.name "Your Name"
 
     AddFileAndCommit
-    Assert "0.0.0.0" "0.0.0-beta0"
+    Assert "0.0.0.0" "0.0.0-beta.0"
 
     AddFileAndCommit
-    Assert "0.0.0.1" "0.0.0-beta1"
+    Assert "0.0.0.1" "0.0.0-beta.1"
 
     AddFileAndCommit
     AddTag "vNext-1.0"
-    Assert "1.0.0.0" "1.0.0-beta0"
+    Assert "1.0.0.0" "1.0.0-beta.0"
 
     AddFileAndCommit
-    Assert "1.0.0.1" "1.0.0-beta1"
+    Assert "1.0.0.1" "1.0.0-beta.1"
 
     AddFileAndCommit
-    Assert "1.0.0.2" "1.0.0-beta2"
+    Assert "1.0.0.2" "1.0.0-beta.2"
 
     AddFileAndCommit
     AddTag "v-1.0"
@@ -57,10 +57,10 @@ function Test {
 
     AddFileAndCommit
     AddTag "vNext-1.1"
-    Assert "1.1.0.0" "1.1.0-beta0"
+    Assert "1.1.0.0" "1.1.0-beta.0"
 
     AddFileAndCommit
-    Assert "1.1.0.1" "1.1.0-beta1"
+    Assert "1.1.0.1" "1.1.0-beta.1"
 
     AddFileAndCommit
     AddTag "v-1.1"
@@ -68,7 +68,7 @@ function Test {
     Assert "1.1.0.2" "1.1.0"
 
     AddFileAndCommit
-    Assert "1.2.0.1" "1.2.0-beta1"
+    Assert "1.2.0.1" "1.2.0-beta.1"
 
     Write-Host "All tests passed" -ForegroundColor Green
 }

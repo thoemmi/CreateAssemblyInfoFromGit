@@ -34,7 +34,7 @@ However, it gets more interesting when you plan a new release for your software.
     
     [assembly: AssemblyVersion("2.0.0.3")]
     [assembly: AssemblyFileVersion("2.0.0.3")]
-    [assembly: AssemblyInformationalVersion("2.0.0-beta3")]
+    [assembly: AssemblyInformationalVersion("2.0.0-beta.3")]
 
 Here the major and minor components of the version are determined by the tag, the build component is 0, and the release component is the number of commits since the tag.
     
@@ -42,20 +42,20 @@ Here the major and minor components of the version are determined by the tag, th
 
 Here's a table how I test the version generation. Each row represents a commit with optional tags attached:
 
-    Tags              File     Display      Description
+    Tags              File     Display       Description
     -----------------------------------------------------------------------------
-                      0.0.0.0  0.0.0-beta0  
-                      0.0.0.1  0.0.0-beta1  
-    vNext-1.0         1.0.0.0  1.0.0-beta0  Started working on v1.0
-                      1.0.0.1  1.0.0-beta1
-                      1.0.0.2  1.0.0-beta2
-    v-1.0             1.0.0.3  1.0.0        Release v1.0
+                      0.0.0.0  0.0.0-beta.0  
+                      0.0.0.1  0.0.0-beta.1  
+    vNext-1.0         1.0.0.0  1.0.0-beta.0  Started working on v1.0
+                      1.0.0.1  1.0.0-beta.1
+                      1.0.0.2  1.0.0-beta.2
+    v-1.0             1.0.0.3  1.0.0         Release v1.0
                       1.0.1.0  1.0.1
 		              1.0.2.0  1.0.2
-    vNext-1.1         1.1.0.0  1.1.0-beta0  Next release will be 1.1
-                      1.1.0.1  1.1.0-beta1
-    v-1.1, vNext-1.2  1.1.0.2  1.1.0        Release v1.1, started working on v1.2
-                      1.2.0.1  1.2.0-beta1			
+    vNext-1.1         1.1.0.0  1.1.0-beta.0  Next release will be 1.1
+                      1.1.0.1  1.1.0-beta.1
+    v-1.1, vNext-1.2  1.1.0.2  1.1.0         Release v1.1, started working on v1.2
+                      1.2.0.1  1.2.0-beta.1			
 
 ## Usage
 

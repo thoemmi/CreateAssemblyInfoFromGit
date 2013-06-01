@@ -46,12 +46,12 @@ namespace CreateAssemblyInfoFromGit {
                 if (version == null) {
                     return new CommonVersion {
                         AssemblyVersion = "0.0.0." + build,
-                        AssemblyInformationalVersion = "0.0.0-beta" + build
+                        AssemblyInformationalVersion = "0.0.0-beta." + build
                     };
                 } else if (isPreliminary) {
                     return new CommonVersion {
                         AssemblyVersion = version + ".0." + build,
-                        AssemblyInformationalVersion = version + ".0-beta" + build
+                        AssemblyInformationalVersion = version + ".0-beta." + build
                     };
                 } else if (justCountingTillVNext) {
                     return new CommonVersion {
