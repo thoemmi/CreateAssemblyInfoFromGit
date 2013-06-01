@@ -1,28 +1,41 @@
 ﻿$dir = Split-Path $MyInvocation.MyCommand.Path
 $srcdir = Join-Path $dir "src"
+$assemblyInfoPath = Join-Path $srcdir "CreateAssemblyInfoFromGit\CommonAssemblyInfo.cs"
+$assemblyPath = Join-Path $srcdir "CreateAssemblyInfoFromGit\bin\Release\CreateAssemblyInfoFromGit.dll"
 
-#get version from git
-. (Join-Path $srcdir "CreateAssemblyInfo.ps1")
-Push-Location $dir
-$version = Get-VersionFromGit
-Pop-Location
+function BuildProject {
+    $msbuild = "c:\windows\microsoft.net\framework\v4.0.30319\MSBuild.exe"
+    $solutionPath = Join-Path $srcdir "CreateAssemblyInfoFromGit.sln"
+    Invoke-Expression "$msbuild `"$solutionPath`" /p:Configuration=Release /t:Build"
+}
 
-Write-Host "Version is $version"
+# if CommonAssemblyversion.cs does not exist, create a dummy
+if (!(Test-Path $assemblyInfoPath)) {
+    Set-Content -Path $assemblyInfoPath -Value ""
+}
 
-# create assembly info
-Update-AssemblyInfo $version (Join-Path $srcdir "CreateAssemblyInfoFromGit\CommonAssemblyInfo.cs")
+# first build (we need the assembly to determine our own version)
+BuildProject 
 
-# build
-$msbuild = "c:\windows\microsoft.net\framework\v4.0.30319\MSBuild.exe"
-$solutionPath = Join-Path $srcdir "CreateAssemblyInfoFromGit.sln"
-Invoke-Expression "$msbuild `"$solutionPath`" /p:Configuration=Release /t:Build"
+# update CommonAssemblyInfo (must be in another AppDomain, because we'll rebuild the assembly later)
+$scriptblock = $ExecutionContext.InvokeCommand.NewScriptBlock( 
+"Add-Type -Path $assemblyPath
+`$ver = [CreateAssemblyInfoFromGit.GitHelper]::GetVersion('$dir')
+[CreateAssemblyInfoFromGit.CreateAssemblyInfoFromGit]::CreateOrUpdateAssemblyInfo('$assemblyInfoPath', `$ver, `$Null)
+`$ver")
+$version = powershell -noprofile -nologo -command $scriptblock
 
-#test
+Write-Host "Version is $($version.AssemblyInformationalVersion)"
+
+# build again, this time with corrected version
+BuildProject 
+
+# test
 . (Join-Path $dir "test.ps1")
 
 # nupack
 $nuget = Join-Path $srcdir ".nuget\nuget.exe"
 $nuspec = Join-Path $srcdir "CreateAssemblyInfo.nuspec"
-Invoke-Expression "$nuget pack `"$nuspec`" -OutputDirectory $dir -version $version"
+Invoke-Expression "$nuget pack `"$nuspec`" -OutputDirectory $dir -version $($version.AssemblyInformationalVersion)"
 
-Write-Host "Package for version $version created." -ForegroundColor Green
+Write-Host "Package for version $($version.AssemblyInformationalVersion) created." -ForegroundColor Green

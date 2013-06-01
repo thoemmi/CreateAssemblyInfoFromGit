@@ -13,14 +13,17 @@ namespace CreateAssemblyInfoFromGit {
         public ITaskItem AssemblyInfoPath { get; set; }
 
         public override bool Execute() {
-
-
             var version = GitHelper.GetVersion(Repository.ItemSpec);
+            return CreateOrUpdateAssemblyInfo(AssemblyInfoPath.ItemSpec, version, str => Log.LogMessage(str));
+        }
 
-            if (File.Exists(AssemblyInfoPath.ItemSpec)) {
-                var oldContent = File.ReadAllText(AssemblyInfoPath.ItemSpec);
+        public static bool CreateOrUpdateAssemblyInfo(string path, CommonVersion version, Action<string> log = null) {
+            if (File.Exists(path)) {
+                var oldContent = File.ReadAllText(path);
                 if (Regex.IsMatch(oldContent, @"AssemblyInformationalVersion\(" + version + @"\)")) {
-                    Log.LogMessage(MessageImportance.Low, Repository.ItemSpec + " is up-to-date.");
+                    if (log != null) {
+                        log(path + " is up-to-date.");
+                    }
                     return true;
                 }
             }
@@ -33,8 +36,10 @@ using System.Reflection;
 [assembly: AssemblyVersion(""{1}"")]
 [assembly: AssemblyFileVersion(""{1}"")]
 [assembly: AssemblyInformationalVersion(""{2}"")]", DateTime.UtcNow, version.AssemblyVersion, version.AssemblyInformationalVersion);
-            File.WriteAllText(AssemblyInfoPath.ItemSpec, content);
-
+            File.WriteAllText(path, content);
+            if (log != null) {
+                log("New AssemblyInfo written to " + path + ".");
+            }
             return true;
         }
     }
