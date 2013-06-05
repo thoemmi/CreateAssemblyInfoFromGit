@@ -20,7 +20,7 @@ namespace CreateAssemblyInfoFromGit {
         public static bool CreateOrUpdateAssemblyInfo(string path, CommonVersion version, Action<string> log = null) {
             if (File.Exists(path)) {
                 var oldContent = File.ReadAllText(path);
-                if (Regex.IsMatch(oldContent, @"AssemblyInformationalVersion\(" + version + @"\)")) {
+                if (oldContent.Contains(@"AssemblyInformationalVersion(""" + version.AssemblyInformationalVersion + @""")")) {
                     if (log != null) {
                         log(path + " is up-to-date.");
                     }
