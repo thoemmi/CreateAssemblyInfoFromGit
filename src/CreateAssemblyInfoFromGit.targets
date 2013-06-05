@@ -8,7 +8,7 @@
     TaskName="CreateAssemblyInfoFromGit"
     AssemblyFile="..\tools\CreateAssemblyInfoFromGit.dll"/>
 
-  <Target Name="CreateCommonVersionInfo" BeforeTargets="CoreCompile">
+  <Target Name="CreateCommonVersionInfo" BeforeTargets="CoreCompile" Outputs="$(AssemblyInfoName)">
     <Message Importance="High" Text="Creating $(AssemblyInfoName)"/>
 
     <CreateAssemblyInfoFromGit
