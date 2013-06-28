@@ -22,7 +22,7 @@ namespace CreateAssemblyInfoFromGit {
                 var justCountingTillVNext = false;
                 foreach (var commit in repository.Head.Commits) {
                     build++;
-                    var tags = allTags.Where(t => t.IsAnnotated && t.Target == commit).ToList();
+                    var tags = allTags.Where(t => t.Target == commit).ToList();
                     if (build == 0 && TryGetVersion(tags, @"v\-?", out version)) {
                         justCountingTillVNext = true;
                         continue;
